@@ -115,7 +115,7 @@ var SinginComponent = React.createClass({
 
 	},
 	requestGreeting: function(text){
-		var REQUEST_URL = 'http://123.57.210.52:80/api/v1/welcome.json' + '?phone=' + text;
+		var REQUEST_URL = 'http://lianqiubao.com/api/v1/welcome.json' + '?phone=' + text;
 		var re = /[1][3578]\d{9}/;
 		if(re.test(text)){
 		fetch(REQUEST_URL)
@@ -173,7 +173,7 @@ var SinginComponent = React.createClass({
 	  }
 	},
 	clickResend: function(){
-		var REQUEST_URL = 'http://123.57.210.52:80/api/v1/welcome.json' + '?phone=' + this.state.phone;
+		var REQUEST_URL = 'http://lianqiubao.com/api/v1/welcome.json' + '?phone=' + this.state.phone;
 		if (this.state.resendValidateText == '重新发送') {
 		 fetch(REQUEST_URL)
         .then((response) => response.json())
@@ -207,14 +207,14 @@ var SinginComponent = React.createClass({
 		})
 	},
 	navigate(routeName) {
-    this.props.navigator.push({
-      name: routeName
-    });
-  },
+    this.props.navigator.resetTo({
+      		name: routeName
+    	});
+ 	 },
 	clickSignIn(){
 		var phoneNum = this.state.phone;
 		var verificationcode = this.state.validateCode;
-		var sign_inUrl = 'http://123.57.210.52:80/api/v1/sign_in.json';
+		var sign_inUrl = 'http://lianqiubao.com/api/v1/sign_in.json';
 		let data = {'phone':phoneNum,'verification_code':verificationcode};
 		if ((this.state.welcome) == '') {
 

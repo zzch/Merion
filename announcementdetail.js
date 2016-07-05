@@ -20,7 +20,7 @@ var AnnouncementDetailComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/announcements/detail.json' + '?token=' + userToken + '&club_uuid=' + clubUuid  + '&uuid=' + announcementUuid;
+		var URL = 'http://lianqiubao.com/api/v1/announcements/detail.json' + '?token=' + userToken + '&club_uuid=' + clubUuid  + '&uuid=' + announcementUuid;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {

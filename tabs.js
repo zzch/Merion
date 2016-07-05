@@ -25,7 +25,7 @@ var TabsComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/tabs.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
+		var URL = 'http://lianqiubao.com/api/v1/tabs.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -139,9 +139,7 @@ var TabsComponent = React.createClass({
 				}
 			},
 	loadMore(){
-		var URL = 'http://123.57.210.52:80/api/v1/tabs.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
-		var maxPage = this.state.page - 2;
-		ToastAndroid.show(this.state.page.toString(),ToastAndroid.SHORT);
+		var URL = 'http://lianqiubao.com/api/v1/tabs.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -271,7 +269,7 @@ var TabsComponent = React.createClass({
 	            </Text>
 			</View>
 			<ListView
-			initialListSize={5}
+					initialListSize={5}
 					onEndReachedThreshold={300}
 					onEndReached={this.loadMore}
 					dataSource={this.state.dataSource}

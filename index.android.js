@@ -3,9 +3,8 @@
 import React, { Component } from 'react';
 
 import {
-	BackAndroid,
 	AppRegistry,
-  	Navigator,
+  Navigator,
 	StyleSheet,
 	View,
 } from 'react-native';
@@ -28,22 +27,14 @@ import Tabs from './tabs';
 import TabsAll from './tabsall';
 import Provisions from './provisions';
 import FirstScreen from './firstscreen';
-var ToastAndroid = require('ToastAndroid');
+var lastBackPressed = Date.now();
 class Root extends Component {
+
 	configureScene(){
 		return Navigator.SceneConfigs.FadeAndroid;
 	}
 	renderScene(route, navigator){
-		var count = 2;
-		  BackAndroid.addEventListener('hardwareBackPress',function(){
-        if (navigator.getCurrentRoutes().length > 1) {
-           navigator.pop();
-           return true;
-         }
-         return false;
-    	  });
-
-		var Component = null;
+		var Component;
 		switch(route.name){
         case "login":
           Component = Login;
@@ -101,6 +92,8 @@ class Root extends Component {
           break;
         case "firstscreen":
           Component = FirstScreen;
+          break;
+          default:
           break;
 
       }

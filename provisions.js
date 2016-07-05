@@ -24,7 +24,7 @@ var ProvisionsComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/provisions.json' + '?token=' + userToken + '&club_uuid=' + clubUuid;
+		var URL = 'http://lianqiubao.com/api/v1/provisions.json' + '?token=' + userToken + '&club_uuid=' + clubUuid;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -38,7 +38,6 @@ var ProvisionsComponent = React.createClass({
       .done();
 	},
 	clickProvisionType(name){
-		ToastAndroid.show(name,ToastAndroid.SHORT)
 		var position = '';
 		for(var i = 0; i < this.state.provisionsData.length; i++)
 			{

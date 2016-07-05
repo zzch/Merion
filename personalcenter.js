@@ -38,11 +38,14 @@ var PersonalCenterComponent = React.createClass({
 	},
 	componentDidMount(){
 		
-			
-		
 	},
 	navigate(routeName){
 	   this.props.navigator.push({
+	        name: routeName
+	      });
+	  },
+	  navigateReset(routeName){
+	   this.props.navigator.resetTo({
 	        name: routeName
 	      });
 	  },
@@ -104,7 +107,7 @@ var PersonalCenterComponent = React.createClass({
 				    // goes to catch()
 				    console.warn(err);
 				})
-		this.navigate('login')
+		this.navigateReset('login')
 	},
 	render(){
 		return (

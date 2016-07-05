@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   ListView,
+  BackAndroid,
   StyleSheet,
   Dimensions,
   ToastAndroid,
@@ -41,9 +42,14 @@ var CardBagComponent = React.createClass({
 	      	}),
 		}
 	},
-
+	backfunction(){
+        this.navigate('homepage');
+        return true;
+        },
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/clubs/membership.json' + '?token=' + userToken;
+		this.functionback = this.backfunction.bind(this);
+      	BackAndroid.addEventListener('hardwareBackPress',this.backfunction);
+		var URL = 'http://lianqiubao.com/api/v1/clubs/membership.json' + '?token=' + userToken;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -55,8 +61,11 @@ var CardBagComponent = React.createClass({
       })
       .done();
 	},
+	componentWillUnmount(){
+    BackAndroid.removeEventListener('hardwareBackPress',this.backfunction)
+  	},
 	clickCardbagTitleLeft(){
-		this.props.navigator.pop();
+		this.navigate('homepage');
 	},
 	navigate(routeName) {
     this.props.navigator.resetTo({
@@ -140,6 +149,7 @@ var CardBagComponent = React.createClass({
 		            </Text>
 				</View>
 				<ListView
+					style={styles.cardbagListView}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderCard}/>
 			</View>
@@ -148,6 +158,9 @@ var CardBagComponent = React.createClass({
 	}
 });
 const styles = StyleSheet.create({
+	cardbagListView:{
+		marginBottom:20
+	},
 	cardbagTelImg:{
 		marginLeft:9,
 		width:15,

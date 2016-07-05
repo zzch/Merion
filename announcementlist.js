@@ -25,7 +25,7 @@ var AnnouncementListComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/announcements.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
+		var URL = 'http://lianqiubao.com/api/v1/announcements.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -55,14 +55,11 @@ var AnnouncementListComponent = React.createClass({
       });
   	},
   	clickAnnouncement(val){
-  		ToastAndroid.show(val,ToastAndroid.SHORT)
   		global.announcementUuid = val;
   		this.navigate('announcementdetail')
   	},
   	loadMore(){
-		var URL = 'http://123.57.210.52:80/api/v1/announcements.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
-		var maxPage = this.state.page - 2;
-		ToastAndroid.show(this.state.page.toString(),ToastAndroid.SHORT);
+		var URL = 'http://lianqiubao.com/api/v1/announcements.json' + '?token=' + userToken + '&club_uuid=' + clubUuid + '&page=' + this.state.page;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -114,7 +111,8 @@ var AnnouncementListComponent = React.createClass({
 	            </Text>
 			</View>
 			<ListView
-				onEndReachedThreshold={200}
+				style={styles.announcementListView}
+				onEndReachedThreshold={300}
 				onEndReached={this.loadMore}
 				dataSource={this.state.dataSource}
 				renderRow={this.renderAnnouncementList}/>
@@ -123,6 +121,9 @@ var AnnouncementListComponent = React.createClass({
 	}
 });
 const styles = StyleSheet.create({
+	announcementListView:{
+		marginBottom:20
+	},
 	announcementDetail:{
 		marginRight:5,
 		marginLeft:5,

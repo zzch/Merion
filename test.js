@@ -71,7 +71,7 @@ var TestComponent = React.createClass({
 	},
 	render(){
 		return (
-				<View style={styles.firstScreenContainer}>
+				<View>
 					<Image
 					  style={styles.firstScreenImg}
 					  source={require('./img/firstscreen.jpg')} />
@@ -85,10 +85,7 @@ const styles = StyleSheet.create({
 		width:Dimensions.get('window').width,
 		height:Dimensions.get('window').height,
 	},
-	firstScreenContainer:{
-		width:Dimensions.get('window').width,
-		height:Dimensions.get('window').height,
-	},
+	
 	
 });
 class Test extends Component {

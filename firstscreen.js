@@ -39,7 +39,7 @@ var FirstScreenComponent = React.createClass({
 
           var loginStateToken = ret.user_token;
           var loginStateClubUuid = ret.club_uuid;
-          var REQUEST_URL = 'http://123.57.210.52:80/api/v1/clubs/home.json' + '?token=' + ret.user_token + '&club_uuid=' + ret.club_uuid;
+          var REQUEST_URL = 'http://lianqiubao.com/api/v1/clubs/home.json' + '?token=' + ret.user_token + '&club_uuid=' + ret.club_uuid;
           if (loginStateToken != '') {
           fetch(REQUEST_URL)
             .then((response) => response.json())

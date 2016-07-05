@@ -1,13 +1,14 @@
 'use strict';
-
 import React, { Component } from 'react';
 import Storage from 'react-native-storage';
 import Dimensions from 'Dimensions';
+import {PagerDotIndicator} from 'rn-viewpager';
 import {
   Text,
   View,
   Image,
   StyleSheet,
+  BackAndroid,
   ToastAndroid,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -29,6 +30,7 @@ var storage = new Storage({
         // we'll talk about the details later.
     }
 });
+var lastBackPressed = Date.now();
 // var userUuid,userName,userPortrait,userToken,userBirthday,clubUuid;
 var HomepageComponent = React.createClass({
   getInitialState(){
@@ -43,9 +45,22 @@ var HomepageComponent = React.createClass({
         announcementDate:''
       }
   },
+    
+  functionback(){
+      if(this.props.navigator.getCurrentRoutes().length > 1) {
+           this.props.navigator.pop();
+           return true;
+          }else if (this.props.navigator.getCurrentRoutes().length == 1 && lastBackPressed && lastBackPressed + 2000 >= Date.now()){
+          //最近2秒内按过back键，可以退出应用。
+           return false;
+          }
+          lastBackPressed = Date.now();
+          ToastAndroid.show('再按一次退出应用',ToastAndroid.SHORT);
+          return true;
+  },
   componentDidMount(){
-    ToastAndroid.show(this.props.navigator.getCurrentRoutes().length.toString(), ToastAndroid.SHORT);
-     storage.load({
+      BackAndroid.addEventListener('hardwareBackPress',this.functionback);
+      storage.load({
           key:'loginState',
           autoSync:true,
           syncInBackground: true
@@ -66,7 +81,7 @@ var HomepageComponent = React.createClass({
           }else{
             global.userGender = '';
           }
-          var REQUEST_URL = 'http://123.57.210.52:80/api/v1/clubs/home.json' + '?token=' + ret.user_token + '&club_uuid=' + ret.club_uuid;
+          var REQUEST_URL = 'http://lianqiubao.com/api/v1/clubs/home.json' + '?token=' + ret.user_token + '&club_uuid=' + ret.club_uuid;
           fetch(REQUEST_URL)
             .then((response) => response.json())
             .then((responseData) => {
@@ -89,13 +104,18 @@ var HomepageComponent = React.createClass({
             console.warn(err);
         });
   },
+  componentWillUnmount(){
+    BackAndroid.removeEventListener('hardwareBackPress',this.functionback)
+    },
   navigate(routeName){
    this.props.navigator.push({
         name: routeName
       });
   },
-  clickfeedBackTitleLeft(){
-    this.props.navigator.pop();
+  navigate1(routeName){
+   this.props.navigator.resetTo({
+        name: routeName
+      });
   },
   handleDate(timestamp){
        var date = new Date(timestamp  * 1000);
@@ -113,7 +133,7 @@ var HomepageComponent = React.createClass({
        this.navigate('personalcenter');
   },
   clickHomePageToolbarRight(){
-    this.navigate('cardbag')
+    this.navigate1('cardbag')
   },
   clickReservation(){
       this.navigate('reservation')
@@ -271,22 +291,22 @@ const styles = StyleSheet.create({
   },
   homePageBtnContainer:{
     width:(Dimensions.get('window').width)/3,
-    height:126,
+    height:(Dimensions.get('window').height - 340)/2,
     alignItems:'center'
   },
   homePageBtnVr:{
     width:0.5,
-    height:126,
+    height:(Dimensions.get('window').height - 340)/2,
     backgroundColor:'#636363'
   },
   homePageLastThreeBtnContainer:{
     width:Dimensions.get('window').width,
-    height:126,
+    height:(Dimensions.get('window').height - 340)/2,
     flexDirection:'row'
   },
   homePageFirstThreeBtnContainer:{
     width:Dimensions.get('window').width,
-    height:126,
+    height:(Dimensions.get('window').height - 340)/2,
     flexDirection:'row'
   },
   rightArrow:{

@@ -23,7 +23,7 @@ var CoachesComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/coaches.json' + '?token=' + userToken + '&club_uuid=' + clubUuid;
+		var URL = 'http://lianqiubao.com/api/v1/coaches.json' + '?token=' + userToken + '&club_uuid=' + clubUuid;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -44,7 +44,6 @@ var CoachesComponent = React.createClass({
 	      });
 	},
 	clickCoaches(val){
-		ToastAndroid.show(val,ToastAndroid.SHORT);
 		global.coachUuid = val;
 		this.navigate('coachdetail')
 	},
@@ -88,6 +87,7 @@ var CoachesComponent = React.createClass({
 	            </Text>
 			</View>
 			<ListView
+				style={styles.coachesListView}
 				dataSource={this.state.dataSource}
 				renderRow={this.renderCoaches}/>
 		</View>
@@ -96,6 +96,9 @@ var CoachesComponent = React.createClass({
 });
 
 const styles = StyleSheet.create({
+	coachesListView:{
+		marginBottom:20
+	},
 	coachesDetailContainer:{
 		width:Dimensions.get('window').width - 90,
 		height:35,

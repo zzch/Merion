@@ -24,7 +24,7 @@ var ReservationListComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		var URL = 'http://123.57.210.52:80/api/v1/reservations.json' + '?token=' + userToken + '&page=' + this.state.page;
+		var URL = 'http://lianqiubao.com/api/v1/reservations.json' + '?token=' + userToken + '&page=' + this.state.page;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -34,7 +34,6 @@ var ReservationListComponent = React.createClass({
           	dataSource: this.state.dataSource.cloneWithRows(responseData),
           	page:(this.state.page) + 1
         });
-        // ToastAndroid.show('success',ToastAndroid.SHORT);
       })
       .done();
 	},
@@ -57,9 +56,7 @@ var ReservationListComponent = React.createClass({
 		}
 	},
 	loadMore(){
-		var URL = 'http://123.57.210.52:80/api/v1/reservations.json' + '?token=' + userToken + '&page=' + this.state.page;
-		var maxPage = this.state.page - 2;
-		ToastAndroid.show(this.state.page.toString(),ToastAndroid.SHORT);
+		var URL = 'http://lianqiubao.com/api/v1/reservations.json' + '?token=' + userToken + '&page=' + this.state.page;
 		fetch(URL)
       	.then((response) => response.json())
       	.then((responseData) => {
@@ -113,6 +110,7 @@ var ReservationListComponent = React.createClass({
 		            </Text>
 				</View>
 				<ListView
+					style={styles.reservationListView}
 					initialListSize={5}
 					onEndReachedThreshold={300}
 					onEndReached={this.loadMore}
@@ -124,6 +122,9 @@ var ReservationListComponent = React.createClass({
 	}
 });
 const styles = StyleSheet.create({
+	reservationListView:{
+		marginBottom:20
+	},
 	reservationListStateContainer:{
 		height:70,
 		justifyContent:'center'

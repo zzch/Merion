@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Image,
+  Alert,
   Picker,
   Dimensions,
   StyleSheet,
@@ -95,7 +96,7 @@ var ReservationComponent = React.createClass({
 		}
 	},
 	componentDidMount(){
-		  var REQUEST_URL = 'http://123.57.210.52:80/api/v1/weathers/recently.json' + '?token=' + userToken + '&club_uuid=' + clubUuid;
+		  var REQUEST_URL = 'http://lianqiubao.com/api/v1/weathers/recently.json' + '?token=' + userToken + '&club_uuid=' + clubUuid;
           fetch(REQUEST_URL)
             .then((response) => response.json())
             .then((responseData) => {
@@ -112,19 +113,28 @@ var ReservationComponent = React.createClass({
               })
               .done();
 	},
-  handleDate1(timestamp){
+  	handleDate1(timestamp){
        var date = new Date(timestamp  * 1000);
        var year = parseInt(date.getFullYear()).toString();
        var month = parseInt(date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1).toString();
        var day = parseInt(date.getDate()).toString(); 
        return (year + '-' + month + '-' + day)
   	},
-  handleDate2(timestamp){
+  	handleDate2(timestamp){
        var date = new Date(timestamp  * 1000);
        var year = parseInt(date.getFullYear()).toString();
        var month = date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1;
        var day = date.getDate() < 10 ? '0'+date.getDate() : date.getDate(); 
        return (month + '-' + day)
+ 	},
+ 	handleDate3(timestamp){
+       var date = new Date(timestamp  * 1000);
+       var year = parseInt(date.getFullYear()).toString();
+       var month = date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1;
+       var day = date.getDate() < 10 ? '0'+date.getDate() : date.getDate(); 
+       var h = date.getHours()  < 10 ? '0'+date.getHours() : date.getHours();
+	   var m = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes();
+       return (year + '-' + month + '-' + day + ' ' + h + ':' + m)
  	},
 	clickReservationTitleLeft(){
 		this.props.navigator.pop();
@@ -164,17 +174,29 @@ var ReservationComponent = React.createClass({
   		var pickedTime = parseInt(this.state.pickTime.substr(0,2))*3600 + parseInt(this.state.pickTime.substr(3,5)) * 60 + this.state.pickedDay - 28800;
   		var token = userToken;
   		var clubuuid = clubUuid;
-  		var reservationsUrl = 'http://123.57.210.52:80/api/v1/reservations.json';
+  		var reservationsUrl = 'http://lianqiubao.com/api/v1/reservations.json';
   		let data = {'token':token,'club_uuid':clubuuid,'reserve_at':pickedTime};
   		NetUitl.postJson(reservationsUrl,data,function (set){
 			if (set.exception_code == 10002) {
 		  		ToastAndroid.show('登录失效',ToastAndroid.SHORT)
 			}else if (set.exception_code == 10003) {
 				ToastAndroid.show('球场未找到',ToastAndroid.SHORT)
-			}else{
-  				ToastAndroid.show(set.result,ToastAndroid.SHORT)
+			}else if (set.exception_code == 20004) {
+				Alert.alert(
+					'重复预约',
+					'您已预约过当天打位',
+					[{text: '确定'}]
+					)
 			}
- 		 });
+			else{
+				Alert.alert(
+					'预约成功',
+					'您已成功预定'+this.handleDate3(pickedTime) +  "的打位，可以在“个人中心”>“打位预约”中查看",
+					[{text: '确定'}]
+					)
+  				// ToastAndroid.show('预订成功',ToastAndroid.SHORT)
+			}
+ 		 }.bind(this));
   	},
   	setWeatherImg(code){
   		if (code == 1) {
@@ -333,7 +355,7 @@ const styles = StyleSheet.create({
 		width:Dimensions.get('window').width - 20,
 		marginLeft:10,
 		marginTop:-60,
-		opacity:1,
+		opacity:0,
 		height:60,
 		borderRadius:5,
 		

@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Image,
+  Alert,
   TextInput,
   Dimensions,
   StyleSheet,
@@ -80,22 +81,25 @@ var SendFeedbackComponent = React.createClass({
 			feedbackContent:'',
 		}
 	},
+	componentDidMount(){
+		
+	},
 	getFeedback(text){
-		var a = parseInt(text.length/44);
+		// var a = parseInt(text.length/44);
 		this.setState({
 			feedbackContent:text,
 		});
-		if(text.length < 44)
-		{
-			this.setState({
-				height:38,
-			})
-		}else if(text.length >= 44 * a && text.length < 44 *(a+1))
-		{	var heigh = 38 + a*19
-			this.setState({
-				height:heigh,
-			})
-		}
+		// if(text.length < 44)
+		// {
+		// 	this.setState({
+		// 		height:38,
+		// 	})
+		// }else if(text.length >= 44 * a && text.length < 44 *(a+1))
+		// {	var heigh = 38 + a*19
+		// 	this.setState({
+		// 		height:heigh,
+		// 	})
+		// }
 		// else if(text.length >= 88 && text.length < 132)
 		// {
 		// 	this.setState({
@@ -150,17 +154,27 @@ var SendFeedbackComponent = React.createClass({
 		var type = feedbackType;
 		var content = this.state.feedbackContent;
 		let data = {'token':token,'club_uuid':club_uuid,'type':type,'content':content};
-		var feedbackUrl = 'http://123.57.210.52:80/api/v1/feedbacks.json';
+		var feedbackUrl = 'http://lianqiubao.com/api/v1/feedbacks.json';
+		if(content == ''){
+			Alert.alert(
+					'请输入反馈内容',
+					'反馈内容不能为空!',
+					[{text: '确定'}]
+				)
+		}else{
 		NetUitl.postJson(feedbackUrl,data,function (set){
 			if (set.error_code == 10003) {
 		  		ToastAndroid.show('登陆失效',ToastAndroid.SHORT);
-		  		this.navigate('login');
 			}else{
-				ToastAndroid.show('反馈成功',ToastAndroid.SHORT);
-				// this.navigate('homepage');
+				Alert.alert(
+					'发送成功',
+					'我们已经收到您的反馈',
+					[{text: '确定'}]
+				)
 
 			}
  		 }.bind(this));
+		}
 
 	},
 	render(){
