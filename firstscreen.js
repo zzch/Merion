@@ -50,6 +50,10 @@ var FirstScreenComponent = React.createClass({
               }else{
               		this.navigate('login')
               }
+              }).catch((error) => {
+                if (error.toString().contains('failed')) {
+                  ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+                }
               })
               .done();
           }else{

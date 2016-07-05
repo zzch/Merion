@@ -79,7 +79,11 @@ static postJson (url, data, callback) {
     .then((response) => response.text())
     .then((responseText) => {
       callback(JSON.parse(responseText));
-    }).done();
+    }).catch((error) => {
+	        if (error.toString().contains('failed')) {
+	          ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+	        }
+	      }).done();
   }
   //get请求
   /**
@@ -157,7 +161,11 @@ var SinginComponent = React.createClass({
 					});
 				},1000);
         	}
-       })
+       }).catch((error) => {
+       	if (error.toString().contains('failed')) {
+  		ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+       	}
+		})
       .done();
 	  }else{
 	  	window.clearInterval(time);

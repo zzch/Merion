@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import Storage from 'react-native-storage';
 import Dimensions from 'Dimensions';
-import {PagerDotIndicator} from 'rn-viewpager';
+import {IndicatorViewPager,PagerDotIndicator} from 'rn-viewpager';
 import {
   Text,
   View,
@@ -35,6 +35,7 @@ var lastBackPressed = Date.now();
 var HomepageComponent = React.createClass({
   getInitialState(){
       return {
+        data:[],
         clubLogo:'',
         cardType:'',
         cardBalance:'',
@@ -42,7 +43,13 @@ var HomepageComponent = React.createClass({
         cardExpiredAt:'',
         weather:'',
         announcement:'',
-        announcementDate:''
+        announcementDate:'',
+        page: 0,
+        animationsAreEnabled: true,
+        progress: {
+          position: 0,
+          offset: 0,
+        },
       }
   },
     
@@ -87,6 +94,7 @@ var HomepageComponent = React.createClass({
             .then((responseData) => {
               // ToastAndroid.show((responseData.error_code).toString(),ToastAndroid.SHORT)
                this.setState({
+                data:responseData.members,
                 clubLogo:responseData.club.logo,
                 cardType:responseData.members[0].card.name,
                 cardBalance:responseData.members[0].balance,
@@ -96,6 +104,10 @@ var HomepageComponent = React.createClass({
                 announcement:responseData.announcements[0].title,
                 announcementDate:responseData.announcements[0].published_at
                })
+              }).catch((error) => {
+                if (error.toString().contains('failed')) {
+                  ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+                }
               })
               .done();
         }).catch(err => {
@@ -156,7 +168,52 @@ var HomepageComponent = React.createClass({
   clickProvisions(){
       this.navigate('provisions')
   },
+  _renderDotIndicator() {
+        return (
+            <PagerDotIndicator
+            style = {styles.indicatorImg}
+                pageCount={this.state.data.length}
+            />
+        );
+  },
   render(){
+    var pages = [];
+     for (var i = 0; i < this.state.data.length; i++) {
+      var pageStyle = {
+        width:Dimensions.get('window').width,
+        height:210,
+        alignItems: 'stretch'
+      };
+      pages.push(
+        <View key={i} style={pageStyle} collapsable={false}>
+          <View style={styles.homePageCardContainer}>
+            
+              <View style={styles.homePageCardImageContainer}>
+             
+                <Image
+                  style={styles.homePageCardImageBackgroundBall}
+                  source={require('./img/backgroudball.png')}>
+                    <Image
+                      style={styles.homePageCardImageLogo}
+                      source={{uri: this.state.clubLogo}} />
+                  </Image>
+                <Text style={styles.homePageCardInfoCardNumber}>
+                  卡号:{this.state.data[i].number}
+                </Text>
+              </View>
+              <View style={styles.homePageCardInfoContainer}>
+                <Text style={styles.homePageCardInfoType}>{this.state.data[i].card.name}</Text>
+                <Text style={styles.homePageCardInfoYue}>储值余额</Text>
+                <Text style={styles.homePageCardInfoBalance}>{this.state.data[i].balance}</Text>
+                <Text style={styles.homePageCardInfoCardExpire}>
+                  有效期至:{this.handleDate(this.state.data[i].expired_at)}
+                </Text>
+             </View>
+         </View>
+       </View>
+      );
+    }
+    var { page, animationsAreEnabled } = this.state;
     return (
         <View style={styles.homePageContainer}>
          <View style={styles.homePageTitleContainer}>
@@ -175,33 +232,20 @@ var HomepageComponent = React.createClass({
             </TouchableWithoutFeedback>
          </View>
 
-         <View style={styles.homePageCardContainer}>
-            <Image
+        <View style={styles.container}>
+        <Image
              style={styles.homePageCardContainer}
              source={require('./img/sy_kamian_bj.png')}>
-              <View style={styles.homePageCardImageContainer}>
-             
-                <Image
-                  style={styles.homePageCardImageBackgroundBall}
-                  source={require('./img/backgroudball.png')}>
-                    <Image
-                      style={styles.homePageCardImageLogo}
-                      source={{uri: this.state.clubLogo}} />
-                  </Image>
-                <Text style={styles.homePageCardInfoCardNumber}>
-                  卡号:{this.state.cardNumber}
-                </Text>
-              </View>
-              <View style={styles.homePageCardInfoContainer}>
-                <Text style={styles.homePageCardInfoType}>{this.state.cardType}</Text>
-                <Text style={styles.homePageCardInfoYue}>储值余额</Text>
-                <Text style={styles.homePageCardInfoBalance}>{this.state.cardBalance}</Text>
-                <Text style={styles.homePageCardInfoCardExpire}>
-                  有效期至:{this.handleDate(this.state.cardExpiredAt)}
-                </Text>
-             </View>
-            </Image>
-         </View>
+         <IndicatorViewPager
+           indicator={this._renderDotIndicator()}
+           style={styles.viewPager}
+           initialPage={0}
+           ref={viewPager => { this.viewPager = viewPager;}}>
+           {pages}
+          </IndicatorViewPager>
+          </Image>
+       </View>
+
          <View style={styles.homePageHr}/>   
          <View style={styles.homePageTempratureAndAnnounceContainer}>
             <View style={styles.homePageTempratureContainer}>
@@ -281,6 +325,16 @@ var HomepageComponent = React.createClass({
   }
 });
 const styles = StyleSheet.create({
+  container: {
+    width:Dimensions.get('window').width,
+    height:210,
+  },
+  viewPager: {
+    flex: 1,
+  },
+  indicatorImg:{
+    alignItems:'center',
+  },
   homePageBtnText:{
     marginTop:15
   },
@@ -379,17 +433,17 @@ const styles = StyleSheet.create({
   },
   homePageCardContainer:{
     width:Dimensions.get('window').width,
-    height:210,
+    height:220,
     flexDirection:'row',
   },
   homePageCardImageContainer:{
     alignItems: 'center', 
     width:(Dimensions.get('window').width)/2,
-    height:210,
+    height:200,
   },
   homePageCardInfoContainer:{
     width:(Dimensions.get('window').width)/2,
-    height:210,
+    height:200,
   },
   homePageCardImageBackgroundBall:{
     width:105,
@@ -425,6 +479,8 @@ const styles = StyleSheet.create({
     marginTop:10
   },
   homePageCardInfoCardExpire:{
+    width:(Dimensions.get('window').width)/2,
+    textAlign:'right',
     position:'absolute',
     bottom:1,
     color:'#b5b5b5'

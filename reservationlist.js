@@ -34,7 +34,11 @@ var ReservationListComponent = React.createClass({
           	dataSource: this.state.dataSource.cloneWithRows(responseData),
           	page:(this.state.page) + 1
         });
-      })
+      }).catch((error) => {
+	        if (error.toString().contains('failed')) {
+	          ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+	        }
+	      })
       .done();
 	},
 	handleDate(timestamp){
@@ -70,7 +74,11 @@ var ReservationListComponent = React.createClass({
         }
         
         // ToastAndroid.show('success',ToastAndroid.SHORT);
-      })
+      }).catch((error) => {
+	        if (error.toString().contains('failed')) {
+	          ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+	        }
+	      })
       .done();
 	},
 	renderReservationList(data){

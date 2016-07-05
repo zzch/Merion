@@ -58,7 +58,11 @@ var CardBagComponent = React.createClass({
           dataSource: this.state.dataSource.cloneWithRows(responseData),
         });
         // ToastAndroid.show('success',ToastAndroid.SHORT);
-      })
+      }).catch((error) => {
+            if (error.toString().contains('failed')) {
+              ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+            }
+          })
       .done();
 	},
 	componentWillUnmount(){

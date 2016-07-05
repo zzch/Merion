@@ -36,7 +36,11 @@ var TabsComponent = React.createClass({
           page:(this.state.page) + 1
         });
         // ToastAndroid.show('success',ToastAndroid.SHORT);
-      })
+      }).catch((error) => {
+	        if (error.toString().contains('failed')) {
+	          ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+	        }
+	      })
       .done();
 	},
 	clickTabsTitleLeft(){
