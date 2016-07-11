@@ -157,7 +157,7 @@ var HomepageComponent = React.createClass({
       this.navigate('coaches')
   },
   clickAnnouncementList(){
-      this.navigate('announcementlist')
+      this.navigate('reservationlist')
   },
   clickPromotions(){
       this.navigate('promotions')

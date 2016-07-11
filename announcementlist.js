@@ -77,7 +77,11 @@ var AnnouncementListComponent = React.createClass({
         }
         
         // ToastAndroid.show('success',ToastAndroid.SHORT);
-      })
+      }).catch((error) => {
+	        if (error.toString().contains('failed')) {
+	          ToastAndroid.show('请检查网络连接',ToastAndroid.SHORT)
+	        }
+	      })
       .done();
 	},
 	renderAnnouncementList(data){
@@ -129,12 +133,13 @@ const styles = StyleSheet.create({
 		marginBottom:20
 	},
 	announcementDetail:{
+		lineHeight:18,
 		marginRight:5,
 		marginLeft:5,
 	},
 	announcementDetailContainer:{
  		width:Dimensions.get('window').width,
- 		height:55,
+ 		height:54,
  		alignItems:'center',
  	},
 	announcementDate:{
@@ -142,6 +147,7 @@ const styles = StyleSheet.create({
 		textAlign:'right'
 	},
 	announcementTitle:{
+		lineHeight:25,
 		fontSize:17,
 		width:140,
 		height:25

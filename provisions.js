@@ -53,7 +53,6 @@ var ProvisionsComponent = React.createClass({
 		this.setState({
           	dataSource:this.state.dataSource.cloneWithRows(this.state.provisionsData[position].provisions),
 		})
-		this.style = {fontColor: 'red'}
 	},
 	clickProvisionsTitleLeft(){
 		this.props.navigator.pop()
@@ -78,7 +77,6 @@ var ProvisionsComponent = React.createClass({
 		return (
 				<View style={styles.provisionsListContainer}>
 					{this.setProvisionsImg(data.image)}
-					
 					<Text style={styles.provisionsNameAndPrice}>
 					  {data.name}
 					</Text>
@@ -98,7 +96,7 @@ var ProvisionsComponent = React.createClass({
 			              source={require( './img/icon_back_arrow.png')} />
 			          </TouchableWithoutFeedback>
 			            <Text style={styles.provisionsTitleText}>
-			              消费记录
+			              餐饮服务
 			            </Text>
 					</View>
 					<View style={styles.provisionsTypeConainer}>

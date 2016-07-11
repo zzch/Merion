@@ -27,6 +27,7 @@ import Tabs from './tabs';
 import TabsAll from './tabsall';
 import Provisions from './provisions';
 import FirstScreen from './firstscreen';
+import Test2 from './test2';
 var lastBackPressed = Date.now();
 class Root extends Component {
 
@@ -93,6 +94,9 @@ class Root extends Component {
         case "firstscreen":
           Component = FirstScreen;
           break;
+        case "test2":
+          Component = Test2;
+          break;
           default:
           break;
 
@@ -102,7 +106,7 @@ class Root extends Component {
   render() {
     return (
       	<Navigator
-      		initialRoute={{name:'firstscreen'}}
+      		initialRoute={{name:'test2'}}
       		configureScene={this.configureScene}
       		renderScene={this.renderScene}
       	/>
